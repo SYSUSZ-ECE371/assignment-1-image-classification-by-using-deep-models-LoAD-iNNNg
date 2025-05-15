@@ -1,0 +1,24 @@
+cuda:0
+Epoch 0/99
+----------
+Learning Rate: 0.000010
+train Loss: 0.5257 Acc: 0.7975
+val Loss: 0.4992 Acc: 0.8014
+
+Epoch 1/99
+----------
+Learning Rate: 0.000010
+train Loss: 0.5081 Acc: 0.7996
+val Loss: 0.4957 Acc: 0.8014
+
+Epoch 2/99
+----------
+Learning Rate: 0.000010
+train Loss: 0.5102 Acc: 0.7996
+val Loss: 0.5000 Acc: 0.8014
+
+Epoch 3/99
+----------
+Learning Rate: 0.000010
+train Loss: 0.5092 Acc: 0.7996
+val Loss: 0.4954 Acc: 0.8014
