@@ -1,0 +1,445 @@
+2025/05/13 16:53:16 - mmengine - INFO - 
+------------------------------------------------------------
+System environment:
+    sys.platform: win32
+    Python: 3.12.2 (tags/v3.12.2:6abddd9, Feb  6 2024, 21:26:36) [MSC v.1937 64 bit (AMD64)]
+    CUDA available: True
+    MUSA available: False
+    numpy_random_seed: 1798461761
+    GPU 0: NVIDIA GeForce RTX 3060 Laptop GPU
+    CUDA_HOME: C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.4
+    NVCC: Cuda compilation tools, release 12.4, V12.4.99
+    GCC: n/a
+    PyTorch: 2.4.1+cu124
+    PyTorch compiling details: PyTorch built with:
+  - C++ Version: 201703
+  - MSVC 192930154
+  - Intel(R) oneAPI Math Kernel Library Version 2024.2.1-Product Build 20240722 for Intel(R) 64 architecture applications
+  - Intel(R) MKL-DNN v3.4.2 (Git Hash 1137e04ec0b5251ca2b4400a4fd3c667ce843d67)
+  - OpenMP 2019
+  - LAPACK is enabled (usually provided by MKL)
+  - CPU capability usage: AVX2
+  - CUDA Runtime 12.4
+  - NVCC architecture flags: -gencode;arch=compute_50,code=sm_50;-gencode;arch=compute_60,code=sm_60;-gencode;arch=compute_61,code=sm_61;-gencode;arch=compute_70,code=sm_70;-gencode;arch=compute_75,code=sm_75;-gencode;arch=compute_80,code=sm_80;-gencode;arch=compute_86,code=sm_86;-gencode;arch=compute_90,code=sm_90
+  - CuDNN 90.1
+  - Magma 2.5.4
+  - Build settings: BLAS_INFO=mkl, BUILD_TYPE=Release, CUDA_VERSION=12.4, CUDNN_VERSION=9.1.0, CXX_COMPILER=C:/actions-runner/_work/pytorch/pytorch/builder/windows/tmp_bin/sccache-cl.exe, CXX_FLAGS=/DWIN32 /D_WINDOWS /GR /EHsc /Zc:__cplusplus /bigobj /FS /utf-8 -DUSE_PTHREADPOOL -DNDEBUG -DUSE_KINETO -DLIBKINETO_NOCUPTI -DLIBKINETO_NOROCTRACER -DUSE_FBGEMM -DUSE_XNNPACK -DSYMBOLICATE_MOBILE_DEBUG_HANDLE /wd4624 /wd4068 /wd4067 /wd4267 /wd4661 /wd4717 /wd4244 /wd4804 /wd4273, LAPACK_INFO=mkl, PERF_WITH_AVX=1, PERF_WITH_AVX2=1, PERF_WITH_AVX512=1, TORCH_VERSION=2.4.1, USE_CUDA=ON, USE_CUDNN=ON, USE_CUSPARSELT=OFF, USE_EXCEPTION_PTR=1, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_GLOO=ON, USE_MKL=ON, USE_MKLDNN=ON, USE_MPI=OFF, USE_NCCL=OFF, USE_NNPACK=OFF, USE_OPENMP=ON, USE_ROCM=OFF, USE_ROCM_KERNEL_ASSERT=OFF, 
+
+    TorchVision: 0.19.1+cu124
+    OpenCV: 4.11.0
+    MMEngine: 0.10.7
+
+Runtime environment:
+    cudnn_benchmark: False
+    mp_cfg: {'mp_start_method': 'fork', 'opencv_num_threads': 0}
+    dist_cfg: {'backend': 'nccl'}
+    seed: 1798461761
+    deterministic: False
+    Distributed launcher: none
+    Distributed training: False
+    GPU number: 1
+------------------------------------------------------------
+
+2025/05/13 16:53:16 - mmengine - INFO - Config:
+auto_scale_lr = dict(base_batch_size=256)
+bgr_mean = [
+    103.53,
+    116.28,
+    123.675,
+]
+bgr_std = [
+    57.375,
+    57.12,
+    58.395,
+]
+data_preprocessor = dict(
+    mean=[
+        123.675,
+        116.28,
+        103.53,
+    ],
+    num_classes=5,
+    std=[
+        58.395,
+        57.12,
+        57.375,
+    ],
+    to_rgb=True)
+dataset_type = 'ImageNet'
+default_hooks = dict(
+    checkpoint=dict(interval=1, type='CheckpointHook'),
+    logger=dict(interval=100, type='LoggerHook'),
+    param_scheduler=dict(type='ParamSchedulerHook'),
+    sampler_seed=dict(type='DistSamplerSeedHook'),
+    timer=dict(type='IterTimerHook'),
+    visualization=dict(enable=False, type='VisualizationHook'))
+default_scope = 'mmcls'
+env_cfg = dict(
+    cudnn_benchmark=False,
+    dist_cfg=dict(backend='nccl'),
+    mp_cfg=dict(mp_start_method='fork', opencv_num_threads=0))
+launcher = 'none'
+load_from = 'https://download.pytorch.org/models/vgg11-bbd30ac9.pth'
+log_level = 'INFO'
+model = dict(
+    backbone=dict(
+        depth=11,
+        init_cfg=dict(
+            checkpoint=
+            'D:/model_cache/hub/checkpoints/vgg11_batch256_imagenet_20210208-4271cd6c.pth',
+            prefix='backbone',
+            type='Pretrained'),
+        num_classes=5,
+        type='VGG'),
+    head=dict(
+        loss=dict(loss_weight=1.0, type='CrossEntropyLoss'),
+        topk=(1, ),
+        type='ClsHead'),
+    neck=None,
+    type='ImageClassifier')
+optim_wrapper = dict(
+    clip_grad=dict(max_norm=35, norm_type=2),
+    optimizer=dict(lr=0.01, momentum=0.9, type='SGD', weight_decay=0.0001))
+param_scheduler = [
+    dict(
+        begin=0,
+        by_epoch=True,
+        convert_to_iter_based=True,
+        end=5,
+        start_factor=0.001,
+        type='LinearLR'),
+    dict(
+        T_max=295,
+        begin=5,
+        by_epoch=True,
+        end=100,
+        eta_min=1e-06,
+        type='CosineAnnealingLR'),
+    dict(
+        begin=0,
+        by_epoch=True,
+        end=100,
+        eta_min=1e-05,
+        param_name='weight_decay',
+        type='CosineAnnealingParamScheduler'),
+]
+randomness = dict(deterministic=False, seed=None)
+resume = False
+test_cfg = dict()
+test_dataloader = dict(
+    batch_size=64,
+    dataset=dict(
+        ann_file='val.txt',
+        classes='data/flower_dataset/classes.txt',
+        data_prefix='val',
+        data_root='data/flower_dataset',
+        pipeline=[
+            dict(type='LoadImageFromFile'),
+            dict(scale=224, type='Resize'),
+            dict(type='PackClsInputs'),
+        ],
+        type='ImageNet'),
+    num_workers=4,
+    sampler=dict(shuffle=False, type='DefaultSampler'))
+test_evaluator = dict(topk=(1, ), type='Accuracy')
+test_pipeline = [
+    dict(type='LoadImageFromFile'),
+    dict(scale=224, type='Resize'),
+    dict(type='PackClsInputs'),
+]
+train_cfg = dict(by_epoch=True, max_epochs=100, val_interval=1)
+train_dataloader = dict(
+    batch_size=64,
+    collate_fn=dict(type='default_collate'),
+    dataset=dict(
+        ann_file='train.txt',
+        classes='data/flower_dataset/classes.txt',
+        data_prefix='train',
+        data_root='data/flower_dataset',
+        pipeline=[
+            dict(type='LoadImageFromFile'),
+            dict(
+                backend='pillow',
+                interpolation='bicubic',
+                scale=224,
+                type='RandomResizedCrop'),
+            dict(direction='horizontal', prob=0.5, type='RandomFlip'),
+            dict(
+                hparams=dict(pad_val=[
+                    104,
+                    116,
+                    124,
+                ]),
+                policies='imagenet',
+                type='AutoAugment'),
+            dict(
+                erase_prob=0.15,
+                fill_color=[
+                    103.53,
+                    116.28,
+                    123.675,
+                ],
+                fill_std=[
+                    57.375,
+                    57.12,
+                    58.395,
+                ],
+                max_area_ratio=0.3333333333333333,
+                min_area_ratio=0.02,
+                mode='rand',
+                type='RandomErasing'),
+            dict(type='PackClsInputs'),
+        ],
+        type='ImageNet'),
+    num_workers=4,
+    persistent_workers=True,
+    pin_memory=True,
+    sampler=dict(shuffle=True, type='DefaultSampler'))
+train_pipeline = [
+    dict(type='LoadImageFromFile'),
+    dict(
+        backend='pillow',
+        interpolation='bicubic',
+        scale=224,
+        type='RandomResizedCrop'),
+    dict(direction='horizontal', prob=0.5, type='RandomFlip'),
+    dict(
+        hparams=dict(pad_val=[
+            104,
+            116,
+            124,
+        ]),
+        policies='imagenet',
+        type='AutoAugment'),
+    dict(
+        erase_prob=0.15,
+        fill_color=[
+            103.53,
+            116.28,
+            123.675,
+        ],
+        fill_std=[
+            57.375,
+            57.12,
+            58.395,
+        ],
+        max_area_ratio=0.3333333333333333,
+        min_area_ratio=0.02,
+        mode='rand',
+        type='RandomErasing'),
+    dict(type='PackClsInputs'),
+]
+val_cfg = dict()
+val_dataloader = dict(
+    batch_size=64,
+    collate_fn=dict(type='default_collate'),
+    dataset=dict(
+        ann_file='val.txt',
+        classes='data/flower_dataset/classes.txt',
+        data_prefix='val',
+        data_root='data/flower_dataset',
+        pipeline=[
+            dict(type='LoadImageFromFile'),
+            dict(scale=224, type='Resize'),
+            dict(type='PackClsInputs'),
+        ],
+        type='ImageNet'),
+    num_workers=4,
+    persistent_workers=True,
+    pin_memory=True,
+    sampler=dict(shuffle=False, type='DefaultSampler'))
+val_evaluator = dict(topk=(1, ), type='Accuracy')
+vis_backends = [
+    dict(type='LocalVisBackend'),
+]
+visualizer = dict(
+    type='ClsVisualizer', vis_backends=[
+        dict(type='LocalVisBackend'),
+    ])
+work_dir = 'work_dir/vgg11_flower'
+
+2025/05/13 16:53:19 - mmengine - INFO - Distributed training is not used, all SyncBatchNorm (SyncBN) layers in the model will be automatically reverted to BatchNormXd layers if they are used.
+2025/05/13 16:53:19 - mmengine - INFO - Hooks will be executed in the following order:
+before_run:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(BELOW_NORMAL) LoggerHook                         
+ -------------------- 
+before_train:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(NORMAL      ) IterTimerHook                      
+(VERY_LOW    ) CheckpointHook                     
+ -------------------- 
+before_train_epoch:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(NORMAL      ) IterTimerHook                      
+(NORMAL      ) DistSamplerSeedHook                
+ -------------------- 
+before_train_iter:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(NORMAL      ) IterTimerHook                      
+ -------------------- 
+after_train_iter:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(NORMAL      ) IterTimerHook                      
+(BELOW_NORMAL) LoggerHook                         
+(LOW         ) ParamSchedulerHook                 
+(VERY_LOW    ) CheckpointHook                     
+ -------------------- 
+after_train_epoch:
+(NORMAL      ) IterTimerHook                      
+(LOW         ) ParamSchedulerHook                 
+(VERY_LOW    ) CheckpointHook                     
+ -------------------- 
+before_val:
+(VERY_HIGH   ) RuntimeInfoHook                    
+ -------------------- 
+before_val_epoch:
+(NORMAL      ) IterTimerHook                      
+ -------------------- 
+before_val_iter:
+(NORMAL      ) IterTimerHook                      
+ -------------------- 
+after_val_iter:
+(NORMAL      ) IterTimerHook                      
+(NORMAL      ) VisualizationHook                  
+(BELOW_NORMAL) LoggerHook                         
+ -------------------- 
+after_val_epoch:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(NORMAL      ) IterTimerHook                      
+(BELOW_NORMAL) LoggerHook                         
+(LOW         ) ParamSchedulerHook                 
+(VERY_LOW    ) CheckpointHook                     
+ -------------------- 
+after_val:
+(VERY_HIGH   ) RuntimeInfoHook                    
+ -------------------- 
+after_train:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(VERY_LOW    ) CheckpointHook                     
+ -------------------- 
+before_test:
+(VERY_HIGH   ) RuntimeInfoHook                    
+ -------------------- 
+before_test_epoch:
+(NORMAL      ) IterTimerHook                      
+ -------------------- 
+before_test_iter:
+(NORMAL      ) IterTimerHook                      
+ -------------------- 
+after_test_iter:
+(NORMAL      ) IterTimerHook                      
+(NORMAL      ) VisualizationHook                  
+(BELOW_NORMAL) LoggerHook                         
+ -------------------- 
+after_test_epoch:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(NORMAL      ) IterTimerHook                      
+(BELOW_NORMAL) LoggerHook                         
+ -------------------- 
+after_test:
+(VERY_HIGH   ) RuntimeInfoHook                    
+ -------------------- 
+after_run:
+(BELOW_NORMAL) LoggerHook                         
+ -------------------- 
+2025/05/13 16:53:20 - mmengine - INFO - load backbone in model from: D:/model_cache/hub/checkpoints/vgg11_batch256_imagenet_20210208-4271cd6c.pth
+2025/05/13 16:53:20 - mmengine - WARNING - The model and loaded state dict do not match exactly
+
+size mismatch for classifier.6.weight: copying a param with shape torch.Size([1000, 4096]) from checkpoint, the shape in current model is torch.Size([5, 4096]).
+size mismatch for classifier.6.bias: copying a param with shape torch.Size([1000]) from checkpoint, the shape in current model is torch.Size([5]).
+Name of parameter - Initialization information
+
+backbone.features.0.conv.weight - torch.Size([64, 3, 3, 3]): 
+PretrainedInit: load from D:/model_cache/hub/checkpoints/vgg11_batch256_imagenet_20210208-4271cd6c.pth 
+
+backbone.features.0.conv.bias - torch.Size([64]): 
+PretrainedInit: load from D:/model_cache/hub/checkpoints/vgg11_batch256_imagenet_20210208-4271cd6c.pth 
+
+backbone.features.2.conv.weight - torch.Size([128, 64, 3, 3]): 
+PretrainedInit: load from D:/model_cache/hub/checkpoints/vgg11_batch256_imagenet_20210208-4271cd6c.pth 
+
+backbone.features.2.conv.bias - torch.Size([128]): 
+PretrainedInit: load from D:/model_cache/hub/checkpoints/vgg11_batch256_imagenet_20210208-4271cd6c.pth 
+
+backbone.features.4.conv.weight - torch.Size([256, 128, 3, 3]): 
+PretrainedInit: load from D:/model_cache/hub/checkpoints/vgg11_batch256_imagenet_20210208-4271cd6c.pth 
+
+backbone.features.4.conv.bias - torch.Size([256]): 
+PretrainedInit: load from D:/model_cache/hub/checkpoints/vgg11_batch256_imagenet_20210208-4271cd6c.pth 
+
+backbone.features.5.conv.weight - torch.Size([256, 256, 3, 3]): 
+PretrainedInit: load from D:/model_cache/hub/checkpoints/vgg11_batch256_imagenet_20210208-4271cd6c.pth 
+
+backbone.features.5.conv.bias - torch.Size([256]): 
+PretrainedInit: load from D:/model_cache/hub/checkpoints/vgg11_batch256_imagenet_20210208-4271cd6c.pth 
+
+backbone.features.7.conv.weight - torch.Size([512, 256, 3, 3]): 
+PretrainedInit: load from D:/model_cache/hub/checkpoints/vgg11_batch256_imagenet_20210208-4271cd6c.pth 
+
+backbone.features.7.conv.bias - torch.Size([512]): 
+PretrainedInit: load from D:/model_cache/hub/checkpoints/vgg11_batch256_imagenet_20210208-4271cd6c.pth 
+
+backbone.features.8.conv.weight - torch.Size([512, 512, 3, 3]): 
+PretrainedInit: load from D:/model_cache/hub/checkpoints/vgg11_batch256_imagenet_20210208-4271cd6c.pth 
+
+backbone.features.8.conv.bias - torch.Size([512]): 
+PretrainedInit: load from D:/model_cache/hub/checkpoints/vgg11_batch256_imagenet_20210208-4271cd6c.pth 
+
+backbone.features.10.conv.weight - torch.Size([512, 512, 3, 3]): 
+PretrainedInit: load from D:/model_cache/hub/checkpoints/vgg11_batch256_imagenet_20210208-4271cd6c.pth 
+
+backbone.features.10.conv.bias - torch.Size([512]): 
+PretrainedInit: load from D:/model_cache/hub/checkpoints/vgg11_batch256_imagenet_20210208-4271cd6c.pth 
+
+backbone.features.11.conv.weight - torch.Size([512, 512, 3, 3]): 
+PretrainedInit: load from D:/model_cache/hub/checkpoints/vgg11_batch256_imagenet_20210208-4271cd6c.pth 
+
+backbone.features.11.conv.bias - torch.Size([512]): 
+PretrainedInit: load from D:/model_cache/hub/checkpoints/vgg11_batch256_imagenet_20210208-4271cd6c.pth 
+
+backbone.classifier.0.weight - torch.Size([4096, 25088]): 
+PretrainedInit: load from D:/model_cache/hub/checkpoints/vgg11_batch256_imagenet_20210208-4271cd6c.pth 
+
+backbone.classifier.0.bias - torch.Size([4096]): 
+PretrainedInit: load from D:/model_cache/hub/checkpoints/vgg11_batch256_imagenet_20210208-4271cd6c.pth 
+
+backbone.classifier.3.weight - torch.Size([4096, 4096]): 
+PretrainedInit: load from D:/model_cache/hub/checkpoints/vgg11_batch256_imagenet_20210208-4271cd6c.pth 
+
+backbone.classifier.3.bias - torch.Size([4096]): 
+PretrainedInit: load from D:/model_cache/hub/checkpoints/vgg11_batch256_imagenet_20210208-4271cd6c.pth 
+
+backbone.classifier.6.weight - torch.Size([5, 4096]): 
+The value is the same before and after calling `init_weights` of ImageClassifier  
+
+backbone.classifier.6.bias - torch.Size([5]): 
+The value is the same before and after calling `init_weights` of ImageClassifier  
+2025/05/13 16:53:20 - mmengine - INFO - Load checkpoint from https://download.pytorch.org/models/vgg11-bbd30ac9.pth
+2025/05/13 16:53:20 - mmengine - WARNING - "FileClient" will be deprecated in future. Please use io functions in https://mmengine.readthedocs.io/en/latest/api/fileio.html#file-io
+2025/05/13 16:53:20 - mmengine - WARNING - "HardDiskBackend" is the alias of "LocalBackend" and the former will be deprecated in future.
+2025/05/13 16:53:20 - mmengine - INFO - Checkpoints will be saved to F:\mmpretrain-1.x\work_dir\vgg11_flower.
+2025/05/13 16:54:57 - mmengine - INFO - Exp name: vgg11_flower_20250513_165315
+2025/05/13 16:54:57 - mmengine - INFO - Epoch(train)   [1][36/36]  lr: 1.9634e-03  eta: 2:38:45  time: 2.0141  data_time: 0.0003  memory: 4878  grad_norm: 9.0898  loss: 0.7149
+2025/05/13 16:54:57 - mmengine - INFO - Saving checkpoint at 1 epochs
+2025/05/13 16:55:19 - mmengine - INFO - Epoch(val) [1][9/9]    accuracy/top1: 86.8190  data_time: 1.6941  time: 1.8453
+2025/05/13 16:56:35 - mmengine - INFO - Exp name: vgg11_flower_20250513_165315
+2025/05/13 16:56:35 - mmengine - INFO - Epoch(train)   [2][36/36]  lr: 3.9725e-03  eta: 2:20:53  time: 2.0217  data_time: 0.0001  memory: 4878  grad_norm: 7.9677  loss: 0.5751
+2025/05/13 16:56:36 - mmengine - INFO - Saving checkpoint at 2 epochs
+2025/05/13 16:56:49 - mmengine - INFO - Epoch(val) [2][9/9]    accuracy/top1: 87.3462  data_time: 0.0073  time: 0.1514
+2025/05/13 16:58:06 - mmengine - INFO - Exp name: vgg11_flower_20250513_165315
+2025/05/13 16:58:06 - mmengine - INFO - Epoch(train)   [3][36/36]  lr: 5.9817e-03  eta: 2:14:10  time: 2.0162  data_time: 0.0004  memory: 4878  grad_norm: 7.2049  loss: 0.4982
+2025/05/13 16:58:06 - mmengine - INFO - Saving checkpoint at 3 epochs
+2025/05/13 16:58:14 - mmengine - INFO - Epoch(val) [3][9/9]    accuracy/top1: 87.3462  data_time: 0.0080  time: 0.1511
+2025/05/13 16:59:31 - mmengine - INFO - Exp name: vgg11_flower_20250513_165315
+2025/05/13 16:59:31 - mmengine - INFO - Epoch(train)   [4][36/36]  lr: 7.9908e-03  eta: 2:10:19  time: 2.0485  data_time: 0.0003  memory: 4878  grad_norm: 7.0081  loss: 0.5446
+2025/05/13 16:59:31 - mmengine - INFO - Saving checkpoint at 4 epochs
+2025/05/13 16:59:38 - mmengine - INFO - Epoch(val) [4][9/9]    accuracy/top1: 89.6309  data_time: 0.0074  time: 0.1615
+2025/05/13 17:00:54 - mmengine - INFO - Exp name: vgg11_flower_20250513_165315
+2025/05/13 17:00:54 - mmengine - INFO - Epoch(train)   [5][36/36]  lr: 1.0000e-02  eta: 2:07:17  time: 2.0132  data_time: 0.0003  memory: 4878  grad_norm: 6.6208  loss: 0.5453
+2025/05/13 17:00:54 - mmengine - INFO - Saving checkpoint at 5 epochs
+2025/05/13 17:01:01 - mmengine - INFO - Epoch(val) [5][9/9]    accuracy/top1: 91.5641  data_time: 0.0072  time: 0.1526
+2025/05/13 17:02:17 - mmengine - INFO - Exp name: vgg11_flower_20250513_165315
+2025/05/13 17:02:17 - mmengine - INFO - Epoch(train)   [6][36/36]  lr: 1.0000e-02  eta: 2:04:51  time: 2.0145  data_time: 0.0005  memory: 4878  grad_norm: 6.0152  loss: 0.5750
+2025/05/13 17:02:17 - mmengine - INFO - Saving checkpoint at 6 epochs
+2025/05/13 17:02:24 - mmengine - INFO - Epoch(val) [6][9/9]    accuracy/top1: 84.7100  data_time: 0.0089  time: 0.1688
